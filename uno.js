@@ -1,123 +1,123 @@
 function mostrar()
-
-/*
-1) nombre, edad, vacuna, dosis, sexo
-
-nombre => 3 y nombre <= 10
-edad >= 12
-vacuna (rusa, china y americana)
-si edad >= 12 y edad <= 17 (americana)
-dosis ("p" en caso de primera y "s" en caso  de segunda)
-sexo (f o m)
-
-promedio de vacunadosRusa
-contadorEdad
-porcentaje de americana mayores de edad
-contador2dosis
-contadorRusa
-contadorAmericana
-contadorChina
-*/
 {
-	let seguir;
 	let nombre;
 	let edad;
 	let vacuna;
 	let dosis;
 	let sexo;
-	let acumAmericana = 0;
-	let acumChina = 0;
-	let acumRusa = 0;
+	let seguir;
 	let acumEdadRusa = 0;
-	let contPersonas = 0;
+	let contVacunaRusa = 0;
 	let promEdadRusa;
+	let nombreMaxMujer;
 	let maxEdadMujer = 0;
-	let maxNombre;
-	let maxVacuna;
-	let contadorAmericanaMayores = 0;
-	let contadorMayores = 0;
-	let porcentajeMayores;
-	let acumSegundaDosis = 0;
-	let porcetajeSegundaDosis;
+	let maxVacunaMujer;
+	let contAmericana = 0;
+	let contAmericanaMayores = 0;
+	let porMayoresAmer;
+	let porSegundaDosis;
+	let contDosis = 0;
+	let contSegundaDosis = 0;
+	let contRusa = 0;
+	let contChina = 0;
+	let contAmer = 0;
 	let vacunaMenos;
+	let contMujeres = 0;
 
 	do{
 
-	nombre = prompt("Por favor, ingrese su nombre");
+		nombre = prompt("Ingrese su nombre");
 
-	if(nombre.length < 3 || nombre.length > 10){
-		nombre = prompt("ERROR, el nombre debe tener entre 3 y 10 caracteres");
-	}
+		while(nombre.length < 3 || nombre.length > 10){
+			nombre = prompt("ERROR, intentelo nuevamente");
+		}	
 
-	edad = parseInt(prompt("Por favor, ingrese su edad"));
-	
-	if(edad >= 12 && edad <= 17){
-		alert("La vacuna solo podra ser americana");
-		acumAmericana++;
-	}
-	else if(edad > 17){
-	vacuna = prompt("Por favor, ingrese la vacuna");
-	contadorMayores++;
+		edad = parseInt(prompt("Ingrese su edad"));
 
-	if(vacuna != "rusa" && vacuna != "americana" && vacuna != "china"){
-		vacuna = prompt("ERROR, intentelo nuevamente");
+		while(edad < 12){
+			edad = parseInt(prompt("ERROR, intentelo nuevamente"));
 		}
+
+		if(edad >= 12 && edad <= 17){
+			alert("Solo puede tener la vacuna americana");
+			contAmericana++;
+		}else{
+			vacuna = prompt("Ingrese la vacuna");
+
+			while(vacuna != "rusa" && vacuna != "americana" && vacuna != "china"){
+				vacuna = prompt("ERROR, intentelo nuevamente");
+			}
+			if(vacuna == "americana"){
+				contAmericana++;
+				contAmericanaMayores++;
+				contAmer++;
+			} else if(vacuna == "rusa"){
+				contRusa++;
+			} else {
+				contChina++;
+			}
+		}
+
+		dosis = prompt("Ingrese la dosis (p/s)");
+
+		while(dosis != "p" && dosis != "s"){
+			dosis = prompt("ERROR, intentelo nuevamente");
+		}
+
+		if(dosis == "p"){
+			contDosis++;
+		}else if(dosis == "s"){
+			contDosis++;
+			contSegundaDosis++;
+		}
+
+		sexo = prompt("Ingrese el sexo (m/f)");
+
+		while(sexo != "m" && sexo != "f"){
+			sexo = prompt("ERROR, intentelo nuevamente");
+		}
+
 		if(vacuna == "rusa"){
-			acumEdadRusa = edad+acumEdadRusa;
-			acumRusa++;
+			acumEdadRusa += edad;
+			contVacunaRusa++;
 		}
-		else if(vacuna == "americana"){
-			contadorAmericanaMayores++;
-			acumAmericana++;
+
+		if(edad > maxEdadMujer && sexo == "f"){
+			maxEdadMujer = edad;
+			nombreMaxMujer = nombre;
+			maxVacunaMujer = vacuna;
 		}
-		else{
-			acumChina++;
+
+		if(sexo == "f"){
+			contMujeres++;
 		}
-	}
 
-	dosis = prompt("Por favor, ingrese la dosis. p/s");
+	seguir = prompt("Desea seguir ingresando datos? s/n")
+	}while(seguir == "s");
 
-	if(dosis != "p" && dosis != "s"){
-		dosis = prompt("ERROR, por favor intentelo nuevamente. (p/s)");
-	}
+	promEdadRusa = acumEdadRusa / contVacunaRusa;
+	porMayoresAmer = (contAmericanaMayores / contAmericana) *100;
+	porSegundaDosis = (contSegundaDosis / contDosis) * 100;
 
-	if(dosis == "s"){
-		acumSegundaDosis++;
-	}
 
-	sexo = prompt("Por favor, ingrese su sexo. (f/m)");
-	
-	if(sexo != "m" && sexo != "f"){
-		sexo = prompt("ERROR, por favor intentelo nuevamente. (f/m)");
-	}
-	
-	if(sexo == "f" && edad > maxEdadMujer){
-		maxEdadMujer = edad + maxEdadMujer;
-		maxNombre = nombre;
-		maxVacuna = vacuna;
-	}
-
-	contPersonas++;
-	seguir = prompt("¿Desea seguir ingresando datos? s/n");
-	}while(seguir == "s")
-
-	porcetajeSegundaDosis = (acumSegundaDosis / contPersonas) * 100;
-	porcentajeMayores = (contadorMayores / contadorAmericanaMayores) *100;
-	promEdadRusa = acumEdadRusa / contPersonas;
-
-	if(acumAmericana < acumChina && acumAmericana < acumRusa){
+	if(contAmer < contRusa && contAmer < contChina){
 		vacunaMenos = "Americana";
-	}
-	else if(acumChina <= acumAmericana && acumChina < acumRusa){
-		vacunaMenos = "China"
-	}
-	else{
-		vacunaMenos = "Rusa"
+	}else if(contRusa <= contAmer && contRusa < contChina){
+		vacunaMenos = "Rusa";
+	} else {
+		vacunaMenos = "China";
 	}
 
-	alert("El promedio de edad de personas con la rusa es " + promEdadRusa);
-	alert("El nombre de la mujer con mas edad es " + maxNombre + " y tiene la vacuna " + maxVacuna);
-	alert("El porcentaje de mayores de edad con la americana es " + porcentajeMayores + "%");
-	alert("El porcentaje de de las personas con segunda dosis frente a todos es " + porcetajeSegundaDosis + "%");
-	alert("La vacuna menos inoculada es " + vacunaMenos);
+
+	if(contRusa >= 1){
+		alert("El promedio de edad de los vacunados con la rusa es " + promEdadRusa);
+		}
+	if(contMujeres >= 1){
+		alert("El nombre de la mujer con mas edad es " + nombreMaxMujer + " y tiene la vacuna " + maxVacunaMujer);
+	}
+	if(contAmericanaMayores >= 1){
+		alert("El porcentaje de mayores de edad vacunados con la americana es " + porMayoresAmer);
+		}
+	alert("El porcentaje de gente vacunada con la segunda dosis es " + porSegundaDosis);
+	alert("La vacuna que menos se utilizo fue la " + vacunaMenos);
 }
